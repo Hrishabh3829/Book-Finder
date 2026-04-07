@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import Header from "../components/Header";
-import { motion } from "motion/react";
+import BookList from "../components/BookList";
+import Pagination from "../components/Pagination";
+import { motion } from "framer-motion";
 
 function normalizeDescription(desc) {
   if (!desc) return null;
@@ -18,6 +20,8 @@ const Author = () => {
   const [bio, setBio] = useState(null);
   const [name, setName] = useState("");
   const [works, setWorks] = useState([]);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 12;
 
   useEffect(() => {
     let cancelled = false;
@@ -46,6 +50,7 @@ const Author = () => {
             cover_i: w.covers?.[0],
           }));
           setWorks(list);
+          setPage(1);
         }
       } catch (e) {
         if (!cancelled) setError("Failed to load author.");
@@ -59,6 +64,12 @@ const Author = () => {
 
   if (loading) return <div className="center"><Spinner /></div>;
   if (error) return <p className="error-text" role="alert">{error}</p>;
+
+  const total = works.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const currentBooks = works.slice(start, start + PAGE_SIZE);
 
   return (
     <motion.div 
@@ -88,7 +99,7 @@ const Author = () => {
       ) : (
         <p className="empty-text">Biography not available.</p>
       )}
-      <motion.h3 
+      <motion.h3
         className="sub-title"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -99,34 +110,17 @@ const Author = () => {
       {works.length === 0 ? (
         <p className="empty-text">No works found.</p>
       ) : (
-        <motion.div 
-          className="book-grid"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          {works.map((w, index) => (
-            <motion.a 
-              key={w.key} 
-              className="book-card" 
-              href={`/book/${(w.key || "").split("/").pop()}`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
-            >
-              <motion.img
-                className="book-cover"
-                alt={`Cover of ${w.title}`}
-                src={w.cover_i ? `https://covers.openlibrary.org/b/id/${w.cover_i}-M.jpg` : "https://via.placeholder.com/200x250?text=No+Cover"}
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.3 }}
-              />
-              <h4 className="book-title">{w.title}</h4>
-              {w.first_publish_year && <p className="details-meta">First published: {w.first_publish_year}</p>}
-            </motion.a>
-          ))}
-        </motion.div>
+        <>
+          <BookList books={currentBooks} />
+          {total > PAGE_SIZE && (
+            <Pagination
+              page={currentPage}
+              pageSize={PAGE_SIZE}
+              total={total}
+              onPageChange={setPage}
+            />
+          )}
+        </>
       )}
     </motion.div>
   );

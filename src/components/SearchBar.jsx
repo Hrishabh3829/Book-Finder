@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "./ui/button";
 
 const SearchBar = ({
   value = "",
@@ -51,15 +52,19 @@ const SearchBar = ({
           whileFocus={{ scale: 1.02 }}
           transition={{ duration: 0.2 }}
         />
-        <motion.button 
-          type="submit" 
-          className="search-btn"
+        <motion.div 
           whileHover={{ scale: 1.05, y: -2 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
         >
-          Search
-        </motion.button>
+          <Button
+            type="submit"
+            size="lg"
+            className="search-btn h-auto px-7 py-3 text-base font-semibold"
+          >
+            Search
+          </Button>
+        </motion.div>
       </motion.form>
 
       <AnimatePresence>

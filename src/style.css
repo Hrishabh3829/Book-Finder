@@ -2,8 +2,9 @@
 :root {
   --bg: #f8fafc;
   --text: #0f172a;
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
+  /* Match shadcn theme primary (soft pink) */
+  --primary: oklch(0.525 0.223 3.958);
+  --primary-hover: oklch(0.48 0.223 3.958);
   --muted: #64748b;
   --card: #ffffff;
   --border: #e2e8f0;
@@ -14,8 +15,8 @@
 html.dark, body.dark {
   --bg: #0f172a;
   --text: #f1f5f9;
-  --primary: #60a5fa;
-  --primary-hover: #3b82f6;
+  --primary: oklch(0.459 0.187 3.815);
+  --primary-hover: oklch(0.42 0.187 3.815);
   --muted: #94a3b8;
   --card: #1e293b;
   --border: #334155;

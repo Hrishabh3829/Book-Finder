@@ -1,12 +1,12 @@
 import BookCard from "./BookCard";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 
 const BookList = ({ books, onSelect }) => {
   if (!books.length) return null;
 
   return (
-    <motion.div 
-      className="book-grid"
+    <motion.div
+      className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}

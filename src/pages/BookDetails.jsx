@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import Header from "../components/Header";
-import { motion } from "motion/react";
+import { Badge } from "../components/ui/badge";
+import { motion } from "framer-motion"; 
+import { toast } from "sonner";
 
 function normalizeDescription(desc) {
   if (!desc) return "No description available.";
@@ -16,6 +18,7 @@ const BookDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [data, setData] = useState(null);
+  const lastToastRef = useRef("");
 
   useEffect(() => {
     let cancelled = false;
@@ -37,6 +40,20 @@ const BookDetails = () => {
     run();
     return () => { cancelled = true; };
   }, [id]);
+
+  useEffect(() => {
+    if (error && lastToastRef.current !== error) {
+      lastToastRef.current = error;
+      toast.error(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (!loading && !error && !data && lastToastRef.current !== "nodata") {
+      lastToastRef.current = "nodata";
+      toast.info("No details available for this book.");
+    }
+  }, [data, error, loading]);
 
   if (loading) return <div className="center"><Spinner /></div>;
   if (error) return <p className="error-text" role="alert">{error}</p>;
@@ -89,15 +106,20 @@ const BookDetails = () => {
           transition={{ delay: 0.4 }}
         >
           <strong>Subjects:</strong>
-          <ul>
+          <ul className="mt-2 flex flex-wrap gap-2">
             {subjects.slice(0, 16).map((s, index) => (
               <motion.li 
                 key={s}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.9, y: 2 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ delay: 0.5 + index * 0.02 }}
               >
-                {s}
+                <Badge
+                  variant="outline"
+                  className="bg-primary/5 text-xs font-medium normal-case"
+                >
+                  {s}
+                </Badge>
               </motion.li>
             ))}
           </ul>

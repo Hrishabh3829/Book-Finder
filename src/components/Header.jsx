@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { SearchContext } from "../context/SearchContext";
-import { motion } from "motion/react";
+import { Button } from "./ui/button";
+import { motion } from "framer-motion"; 
 
 const Header = () => {
   const { dark, toggleDark, resetSearch } = useContext(SearchContext);
@@ -18,13 +19,15 @@ const Header = () => {
     >
       <div className="header-left">
         {showBack && (
-          <button
-            className="back-btn"
+          <Button
+            variant="outline"
+            size="sm"
+            className="back-btn rounded-full px-4"
             onClick={() => navigate(-1)}
             aria-label="Go back"
           >
             ← Back
-          </button>
+          </Button>
         )}
         <h1 className="app-title">
           <Link
