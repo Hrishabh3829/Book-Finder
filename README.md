@@ -1,16 +1,39 @@
-# React + Vite
+# Book Finder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A clean, modern Book Finder built with React, Vite, Tailwind, and shadcn UI. It searches Open Library, lets you browse categories, and save bookmarks.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Fast search with a gooey input
+- Bookmarks list (your saved books)
+- Category browsing (Technology, History, Mystery)
+- Filters for cover, author, language, year range
+- Responsive card layout and pagination
+- Toasts for missing book details
 
-## React Compiler
+## Quick start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+npm run dev
+```
 
-## Expanding the ESLint configuration
+Open the URL shown in the terminal.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Project structure
+
+- src/components - Reusable UI (cards, headers, dropdowns, loaders)
+- src/pages - Home, Category, BookDetails, Bookmarks, Author
+- src/context - Search and bookmarks state
+- src/hooks - Data fetching and filtering
+
+## Notes
+
+- Data source: Open Library API
+- Bookmarks are saved in localStorage
+
+## Scripts
+
+- npm run dev - Start the dev server
+- npm run build - Production build
+- npm run preview - Preview the build
