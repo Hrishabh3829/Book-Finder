@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import Header from "../components/Header";
+import { Badge } from "../components/ui/badge";
 import { motion } from "framer-motion"; 
 
 function normalizeDescription(desc) {
@@ -89,15 +90,20 @@ const BookDetails = () => {
           transition={{ delay: 0.4 }}
         >
           <strong>Subjects:</strong>
-          <ul>
+          <ul className="mt-2 flex flex-wrap gap-2">
             {subjects.slice(0, 16).map((s, index) => (
               <motion.li 
                 key={s}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.9, y: 2 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ delay: 0.5 + index * 0.02 }}
               >
-                {s}
+                <Badge
+                  variant="outline"
+                  className="bg-primary/5 text-xs font-medium normal-case"
+                >
+                  {s}
+                </Badge>
               </motion.li>
             ))}
           </ul>

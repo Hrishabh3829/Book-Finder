@@ -72,8 +72,12 @@ const BookCard = ({ book, onSelect }) => {
           />
           <Button
             size="icon-sm"
-            variant={fav ? "secondary" : "outline"}
-            className="absolute right-3 top-3 rounded-full bg-background/80 backdrop-blur border border-border/70 text-lg leading-none"
+            variant="outline"
+            className={`absolute right-3 top-3 rounded-full border text-lg leading-none bg-background/80 backdrop-blur ${
+              fav
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-border/70 text-foreground/70"
+            }`}
             onClick={handleToggleFavorite}
             aria-pressed={fav}
             aria-label={fav ? "Remove from favorites" : "Add to favorites"}

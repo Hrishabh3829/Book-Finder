@@ -177,23 +177,22 @@ const FiltersSection = ({ filters, setFilters, resetFilters, resultCount, browse
       <Dialog open={open} onOpenChange={setOpen}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
-            <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
-              <Button
-                id="browse-toggle"
-                variant="outline"
-                size="sm"
-                className="rounded-full px-3"
-                onClick={() => setBrowseOpen(!browseOpen)}
-                aria-expanded={browseOpen}
-                aria-controls="sidebar"
-              >
-                <span className="mr-1" aria-hidden>
-                  📚
-                </span>
-                Browse
-              </Button>
-            </motion.div>
-            <BrowseDropdown isOpen={browseOpen} onClose={() => setBrowseOpen(false)} />
+            <div className="relative inline-block">
+              <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
+                <Button
+                  id="browse-toggle"
+                  variant="outline"
+                  size="sm"
+                  className="rounded-full px-3"
+                  onClick={() => setBrowseOpen(!browseOpen)}
+                  aria-expanded={browseOpen}
+                  aria-controls="sidebar"
+                >
+                  Browse
+                </Button>
+              </motion.div>
+              <BrowseDropdown isOpen={browseOpen} onClose={() => setBrowseOpen(false)} />
+            </div>
 
             <DialogTrigger asChild>
               <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>

@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import BookList from "../components/BookList";
 import Spinner from "../components/Spinner";
 import BrowseDropdown from "../components/BrowseDropdown";
+import { Button } from "../components/ui/button";
 import { motion } from "framer-motion";
 import Pagination from "../components/Pagination";
 
@@ -64,22 +65,32 @@ const Category = () => {
   return (
     <div className="app-container">
       <Header />
-        <div className="filters-top" style={{marginBottom: 8}}>
-          <div className="filters-left" style={{ position: 'relative' }}>
-            <motion.button
-              id="browse-toggle"
-              className="filters-toggle browse-toggle"
-              onClick={() => setBrowseOpen(!browseOpen)}
-              aria-expanded={browseOpen}
-              aria-controls="sidebar"
+        <div className="filters-top" style={{ marginBottom: 8 }}>
+          <div className="filters-left" style={{ position: "relative" }}>
+            <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
-              <span className="caret" aria-hidden>▾</span>
-              <span>📚 Browse</span>
-            </motion.button>
-            
-            <BrowseDropdown isOpen={browseOpen} onClose={() => setBrowseOpen(false)} />
+              <Button
+                id="browse-toggle"
+                variant="outline"
+                size="sm"
+                className="browse-toggle rounded-full px-3"
+                onClick={() => setBrowseOpen(!browseOpen)}
+                aria-expanded={browseOpen}
+                aria-controls="sidebar"
+              >
+                <span className="caret" aria-hidden>
+                  ▾
+                </span>
+                <span>Browse</span>
+              </Button>
+            </motion.div>
+
+            <BrowseDropdown
+              isOpen={browseOpen}
+              onClose={() => setBrowseOpen(false)}
+            />
           </div>
         </div>
         <motion.h2 
