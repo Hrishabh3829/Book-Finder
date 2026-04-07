@@ -29,7 +29,7 @@ const HeroSection = ({ searchSlot }) => {
                 </CardTitle>
                 <CardDescription className="max-w-xl text-base sm:text-lg">
                   Search across millions of titles, filter by author, year and
-                  language, and save favourites to revisit later.
+                  language, and save bookmarks to revisit later.
                 </CardDescription>
               </CardHeader>
 
@@ -39,7 +39,7 @@ const HeroSection = ({ searchSlot }) => {
                 <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-muted-foreground">
                   <span>✨ Smart filters for covers, years and languages</span>
                   <span className="hidden sm:inline">•</span>
-                  <span>⭐ Keep a personal shelf of favourites</span>
+                  <span>🔖 Keep a personal shelf of bookmarks</span>
                 </div>
 
                 <div className="flex flex-wrap gap-3 pt-1">
@@ -48,7 +48,7 @@ const HeroSection = ({ searchSlot }) => {
                     className="rounded-full px-5"
                     asChild
                   >
-                    <Link to="/favorites">View favourites</Link>
+                    <Link to="/favorites">View bookmarks</Link>
                   </Button>
                   <Button
                     variant="outline"

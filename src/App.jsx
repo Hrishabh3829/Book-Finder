@@ -16,6 +16,8 @@ import Author from "./pages/Author";
 import { SearchProvider } from "./context/SearchContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import PageLoader from "./components/PageLoader";
+import { Toaster } from "./components/ui/sonner";
+import { TooltipProvider } from "./components/ui/tooltip";
 import "./style.css";
 import {
   Card,
@@ -42,12 +44,15 @@ function RootShell() {
   const showLoader = initialLoading || isRouteLoading;
 
   return (
-    <div className="min-h-dvh bg-background text-foreground">
-      <PageLoader isLoading={showLoader} />
-      <main className="container mx-auto px-4 py-6">
-        <Outlet />
-      </main>
-    </div>
+    <TooltipProvider>
+      <div className="min-h-dvh bg-background text-foreground">
+        <PageLoader isLoading={showLoader} />
+        <Toaster />
+        <main className="container mx-auto px-4 py-6">
+          <Outlet />
+        </main>
+      </div>
+    </TooltipProvider>
   );
 }
 

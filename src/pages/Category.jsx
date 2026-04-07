@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Header from "../components/Header";
 import BookList from "../components/BookList";
 import Spinner from "../components/Spinner";
-import BrowseDropdown from "../components/BrowseDropdown";
+import BrowseDropdownMenu from "../components/BrowseDropdownMenu";
 import { Button } from "../components/ui/button";
 import { motion } from "framer-motion";
 import Pagination from "../components/Pagination";
@@ -54,8 +54,6 @@ const Category = () => {
 
   const title = name?.charAt(0).toUpperCase() + name?.slice(1);
 
-  const [browseOpen, setBrowseOpen] = useState(false);
-
   const total = books.length;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -71,26 +69,8 @@ const Category = () => {
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Button
-                id="browse-toggle"
-                variant="outline"
-                size="sm"
-                className="browse-toggle rounded-full px-3"
-                onClick={() => setBrowseOpen(!browseOpen)}
-                aria-expanded={browseOpen}
-                aria-controls="sidebar"
-              >
-                <span className="caret" aria-hidden>
-                  ▾
-                </span>
-                <span>Browse</span>
-              </Button>
+              <BrowseDropdownMenu />
             </motion.div>
-
-            <BrowseDropdown
-              isOpen={browseOpen}
-              onClose={() => setBrowseOpen(false)}
-            />
           </div>
         </div>
         <motion.h2 

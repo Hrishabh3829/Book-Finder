@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import Header from "../components/Header";
 import { Badge } from "../components/ui/badge";
 import { motion } from "framer-motion"; 
+import { toast } from "sonner";
 
 function normalizeDescription(desc) {
   if (!desc) return "No description available.";
@@ -17,6 +18,7 @@ const BookDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [data, setData] = useState(null);
+  const lastToastRef = useRef("");
 
   useEffect(() => {
     let cancelled = false;
@@ -38,6 +40,20 @@ const BookDetails = () => {
     run();
     return () => { cancelled = true; };
   }, [id]);
+
+  useEffect(() => {
+    if (error && lastToastRef.current !== error) {
+      lastToastRef.current = error;
+      toast.error(error);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (!loading && !error && !data && lastToastRef.current !== "nodata") {
+      lastToastRef.current = "nodata";
+      toast.info("No details available for this book.");
+    }
+  }, [data, error, loading]);
 
   if (loading) return <div className="center"><Spinner /></div>;
   if (error) return <p className="error-text" role="alert">{error}</p>;

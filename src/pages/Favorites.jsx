@@ -33,10 +33,10 @@ const Favorites = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
       >
-        ⭐ Favorites
+        🔖 Bookmarks
       </motion.h2>
       {favorites.length === 0 ? (
-        <p className="empty-text">No favorites yet. Add some books you love.</p>
+        <p className="empty-text">No bookmarks yet. Save books you love.</p>
       ) : (
         <>
           <BookList books={currentBooks} />

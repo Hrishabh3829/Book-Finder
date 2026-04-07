@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FavoritesContext } from "../context/FavoritesContext";
+import { BookmarkIcon } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -10,6 +11,7 @@ import {
   CardContent,
 } from "./ui/card";
 import { Button } from "./ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import {
   ContextMenu,
   ContextMenuTrigger,
@@ -54,13 +56,13 @@ const BookCard = ({ book, onSelect }) => {
           transition={{ duration: 0.3, ease: "easeOut" }}
         >
           <Card
-            className="group flex h-full cursor-pointer flex-col overflow-hidden border bg-card/95 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            className="group flex h-full cursor-pointer flex-col overflow-hidden border bg-card/95 p-0 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
             role="button"
             tabIndex={0}
             onClick={() => onSelect?.(book)}
             onKeyDown={(event) => (event.key === "Enter" ? onSelect?.(book) : null)}
           >
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden border-b">
           <motion.img
             src={coverUrl}
             alt={`Cover of ${book.title}${
@@ -70,20 +72,27 @@ const BookCard = ({ book, onSelect }) => {
             whileHover={{ scale: 1.04 }}
             transition={{ duration: 0.3 }}
           />
-          <Button
-            size="icon-sm"
-            variant="outline"
-            className={`absolute right-3 top-3 rounded-full border text-lg leading-none bg-background/80 backdrop-blur ${
-              fav
-                ? "border-primary bg-primary/10 text-primary"
-                : "border-border/70 text-foreground/70"
-            }`}
-            onClick={handleToggleFavorite}
-            aria-pressed={fav}
-            aria-label={fav ? "Remove from favorites" : "Add to favorites"}
-          >
-            {fav ? "★" : "☆"}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon-sm"
+                variant="outline"
+                className={`absolute right-3 top-3 rounded-full border bg-background/80 backdrop-blur ${
+                  fav
+                    ? "border-primary bg-primary/10 text-primary"
+                    : "border-border/70 text-foreground/70 hover:border-primary/60 hover:bg-primary/10 hover:text-primary"
+                }`}
+                onClick={handleToggleFavorite}
+                aria-pressed={fav}
+                aria-label={fav ? "Remove bookmark" : "Add bookmark"}
+              >
+                <BookmarkIcon className={fav ? "fill-current" : ""} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="left" sideOffset={8}>
+              {fav ? "Remove bookmark" : "Add bookmark"}
+            </TooltipContent>
+          </Tooltip>
         </div>
 
         <CardHeader className="space-y-1 px-4 pt-3 pb-1">
@@ -158,7 +167,7 @@ const BookCard = ({ book, onSelect }) => {
         )}
         <ContextMenuSeparator />
         <ContextMenuItem onClick={handleToggleFavorite}>
-          {fav ? "Remove from favourites" : "Add to favourites"}
+          {fav ? "Remove bookmark" : "Add bookmark"}
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

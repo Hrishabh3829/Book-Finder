@@ -1,10 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import SearchBar from "../components/SearchBar";
 import Header from "../components/Header";
 import BookList from "../components/BookList";
 import Spinner from "../components/Spinner";
 import Modal from "../components/Modal";
-import BrowseDropdown from "../components/BrowseDropdown";
+import BrowseDropdownMenu from "../components/BrowseDropdownMenu";
 import HeroSection from "../components/HeroSection";
 import Pagination from "../components/Pagination";
 import YearDatePicker from "../components/YearDatePicker";
@@ -17,6 +17,7 @@ import {
 } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Checkbox } from "../components/ui/checkbox";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../components/ui/tooltip";
 import {
   Dialog,
   DialogClose,
@@ -30,21 +31,25 @@ import {
 import { useBooks } from "../hooks/useBooks";
 import { SearchContext } from "../context/SearchContext";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 const Home = () => {
   const { query, setQuery, filters, setFilters, resetFilters, recent, addRecent, clearRecent } = useContext(SearchContext);
 
   const { books, loading, error, fetchDetails } = useBooks();
 
+  const lastEmptyQueryRef = useRef("");
+
   const [details, setDetails] = useState({ open: false, loading: false, data: null });
   const openDetails = async (book) => {
     setDetails({ open: true, loading: true, data: null });
     const d = await fetchDetails(book);
+    if (!d) {
+      toast.info("No details available for this book.");
+    }
     setDetails({ open: true, loading: false, data: d });
   };
   const closeDetails = () => setDetails({ open: false, loading: false, data: null });
-
-  const [browseOpen, setBrowseOpen] = useState(false);
 
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 12;
@@ -52,6 +57,13 @@ const Home = () => {
   useEffect(() => {
     setPage(1);
   }, [query, filters]);
+
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (!loading && !error && trimmed && books.length === 0) {
+      lastEmptyQueryRef.current = trimmed;
+    }
+  }, [books.length, error, loading, query]);
 
   const total = books.length;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -87,8 +99,6 @@ const Home = () => {
         setFilters={setFilters}
         resetFilters={resetFilters}
         resultCount={books.length}
-        browseOpen={browseOpen}
-        setBrowseOpen={setBrowseOpen}
       />
 
       {loading ? (
@@ -162,7 +172,7 @@ const Home = () => {
 
 export default Home;
 
-const FiltersSection = ({ filters, setFilters, resetFilters, resultCount, browseOpen, setBrowseOpen }) => {
+const FiltersSection = ({ filters, setFilters, resetFilters, resultCount }) => {
   const [open, setOpen] = useState(false);
 
   const activeChips = [];
@@ -177,38 +187,32 @@ const FiltersSection = ({ filters, setFilters, resetFilters, resultCount, browse
       <Dialog open={open} onOpenChange={setOpen}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="relative inline-block">
-              <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
-                <Button
-                  id="browse-toggle"
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full px-3"
-                  onClick={() => setBrowseOpen(!browseOpen)}
-                  aria-expanded={browseOpen}
-                  aria-controls="sidebar"
-                >
-                  Browse
-                </Button>
-              </motion.div>
-              <BrowseDropdown isOpen={browseOpen} onClose={() => setBrowseOpen(false)} />
-            </div>
+            <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
+              <BrowseDropdownMenu />
+            </motion.div>
 
             <DialogTrigger asChild>
               <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.97 }}>
-                <Button
-                  id="filters-toggle"
-                  variant="secondary"
-                  size="sm"
-                  className="rounded-full px-3"
-                  aria-expanded={open}
-                  aria-controls="filters-panel"
-                >
-                  <span className="mr-1" aria-hidden>
-                    ▾
-                  </span>
-                  Filters
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      id="filters-toggle"
+                      variant="secondary"
+                      size="sm"
+                      className="rounded-full px-3"
+                      aria-expanded={open}
+                      aria-controls="filters-panel"
+                    >
+                      <span className="mr-1" aria-hidden>
+                        ▾
+                      </span>
+                      Filters
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" sideOffset={6}>
+                    Open filters
+                  </TooltipContent>
+                </Tooltip>
               </motion.div>
             </DialogTrigger>
 
