@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import Header from "../components/Header";
-import { motion } from "motion/react";
+import { motion } from "framer-motion"; 
 
 function normalizeDescription(desc) {
   if (!desc) return "No description available.";

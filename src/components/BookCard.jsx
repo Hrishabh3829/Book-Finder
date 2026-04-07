@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { FavoritesContext } from "../context/FavoritesContext";
-import { motion } from "motion/react";
+import { motion } from "framer-motion"; 
 
 const BookCard = ({ book, onSelect }) => {
   const coverUrl = book.cover_i

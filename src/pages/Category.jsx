@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import BookList from "../components/BookList";
 import Spinner from "../components/Spinner";
 import BrowseDropdown from "../components/BrowseDropdown";
-import { motion } from "motion/react";
+import { motion } from "framer-motion"; 
 
 const Category = () => {
   const { name } = useParams();

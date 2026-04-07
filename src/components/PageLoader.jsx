@@ -1,6 +1,6 @@
 import React from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const PageLoader = ({ isLoading }) => {
   return (

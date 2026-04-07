@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Modal = ({ open, title, children, onClose }) => {
   const previouslyFocused = useRef(null);

@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { FavoritesContext } from "../context/FavoritesContext";
 import BookList from "../components/BookList";
 import Header from "../components/Header";
-import { motion } from "motion/react";
+import { motion } from "framer-motion"; 
 
 const Favorites = () => {
   const { favorites } = useContext(FavoritesContext);

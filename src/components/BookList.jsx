@@ -1,5 +1,5 @@
 import BookCard from "./BookCard";
-import { motion } from "motion/react";
+import { motion } from "framer-motion"; 
 
 const BookList = ({ books, onSelect }) => {
   if (!books.length) return null;

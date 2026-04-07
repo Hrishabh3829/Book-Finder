@@ -7,7 +7,7 @@ import Modal from "../components/Modal";
 import BrowseDropdown from "../components/BrowseDropdown";
 import { useBooks } from "../hooks/useBooks";
 import { SearchContext } from "../context/SearchContext";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Home = () => {
   const { query, setQuery, filters, setFilters, resetFilters, recent, addRecent, clearRecent } = useContext(SearchContext);

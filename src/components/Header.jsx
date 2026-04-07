@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { SearchContext } from "../context/SearchContext";
-import { motion } from "motion/react";
+import { motion } from "framer-motion"; 
 
 const Header = () => {
   const { dark, toggleDark, resetSearch } = useContext(SearchContext);
