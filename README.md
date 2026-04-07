@@ -1,7 +1,7 @@
 # 📚 Book Finder
 
 A modern, responsive book search application with smooth animations and an elegant UI. Search for books, browse by category, manage favorites, and explore detailed book information powered by the Open Library API.
-
+ 
 ---
 
 ## ✨ Features
