@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { SearchContext } from "../context/SearchContext";
 
-const MAX_RESULTS = 50; // show up to 50 results, no pagination
+const MAX_RESULTS = 50; 
 
 function normalizeDescription(desc) {
   if (!desc) return "No description available.";
