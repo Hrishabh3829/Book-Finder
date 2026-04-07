@@ -147,6 +147,35 @@ a:focus-visible {
   color: var(--primary-hover);
 }
 
+.brand-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 2px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.brand-icon {
+  width: 22px;
+  height: 22px;
+  color: var(--primary);
+}
+
+.brand-text {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+
+.brand-pill:focus,
+.brand-pill:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 20%, transparent);
+}
+
 .theme-toggle:hover { 
   transform: translateY(-2px); 
   box-shadow: 0 4px 12px var(--shadow-md);
@@ -268,6 +297,21 @@ a:focus-visible {
 
 .search-btn:active {
   transform: translateY(0);
+}
+
+/* Gooey search input overrides (remove pink outline) */
+.gooey-search button,
+.gooey-search input {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gooey-search button:focus,
+.gooey-search button:focus-visible,
+.gooey-search input:focus,
+.gooey-search input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* ---------- BOOK GRID ---------- */
