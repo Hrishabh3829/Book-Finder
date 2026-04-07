@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import Header from "../components/Header";
 import BookList from "../components/BookList";
+import Pagination from "../components/Pagination";
 import { motion } from "framer-motion";
 
 function normalizeDescription(desc) {
@@ -19,6 +20,8 @@ const Author = () => {
   const [bio, setBio] = useState(null);
   const [name, setName] = useState("");
   const [works, setWorks] = useState([]);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 12;
 
   useEffect(() => {
     let cancelled = false;
@@ -47,6 +50,7 @@ const Author = () => {
             cover_i: w.covers?.[0],
           }));
           setWorks(list);
+          setPage(1);
         }
       } catch (e) {
         if (!cancelled) setError("Failed to load author.");
@@ -60,6 +64,12 @@ const Author = () => {
 
   if (loading) return <div className="center"><Spinner /></div>;
   if (error) return <p className="error-text" role="alert">{error}</p>;
+
+  const total = works.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const currentBooks = works.slice(start, start + PAGE_SIZE);
 
   return (
     <motion.div 
@@ -100,7 +110,17 @@ const Author = () => {
       {works.length === 0 ? (
         <p className="empty-text">No works found.</p>
       ) : (
-        <BookList books={works} />
+        <>
+          <BookList books={currentBooks} />
+          {total > PAGE_SIZE && (
+            <Pagination
+              page={currentPage}
+              pageSize={PAGE_SIZE}
+              total={total}
+              onPageChange={setPage}
+            />
+          )}
+        </>
       )}
     </motion.div>
   );

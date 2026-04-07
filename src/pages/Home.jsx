@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
 import Header from "../components/Header";
 import BookList from "../components/BookList";
@@ -6,6 +6,7 @@ import Spinner from "../components/Spinner";
 import Modal from "../components/Modal";
 import BrowseDropdown from "../components/BrowseDropdown";
 import HeroSection from "../components/HeroSection";
+import Pagination from "../components/Pagination";
 import { useBooks } from "../hooks/useBooks";
 import { SearchContext } from "../context/SearchContext";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,6 +25,19 @@ const Home = () => {
   const closeDetails = () => setDetails({ open: false, loading: false, data: null });
 
   const [browseOpen, setBrowseOpen] = useState(false);
+
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 12;
+
+  useEffect(() => {
+    setPage(1);
+  }, [query, filters]);
+
+  const total = books.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const currentBooks = books.slice(start, start + PAGE_SIZE);
 
   return (
     <div className="app-container space-y-6">
@@ -85,7 +99,17 @@ const Home = () => {
           No results for '{query}'. Try another title or adjust filters.
         </motion.p>
       ) : (
-        <BookList books={books} onSelect={openDetails} />
+        <>
+          <BookList books={currentBooks} onSelect={openDetails} />
+          {!loading && !error && total > PAGE_SIZE && (
+            <Pagination
+              page={currentPage}
+              pageSize={PAGE_SIZE}
+              total={total}
+              onPageChange={setPage}
+            />
+          )}
+        </>
       )}
 
       <Modal open={details.open} title={details.data?.title || "Book details"} onClose={closeDetails}>
