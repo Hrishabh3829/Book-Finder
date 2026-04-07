@@ -9,6 +9,13 @@ import { SearchProvider } from "./context/SearchContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import PageLoader from "./components/PageLoader";
 import "./style.css";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "./components/ui/card";
 
 function RouteChangeHandler({ children }) {
   const location = useLocation();
@@ -60,6 +67,17 @@ function App() {
           </FavoritesProvider>
         </SearchProvider>
       </BrowserRouter>
+      <Card className="max-w-sm">
+      <CardHeader>
+        <CardTitle>Project Overview</CardTitle>
+        <CardDescription>
+          Track progress and recent activity for your Vite app.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        Your design system is ready. Start building your next component.
+      </CardContent>
+    </Card>
      
     </>
   );
