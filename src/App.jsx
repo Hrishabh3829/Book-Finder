@@ -60,6 +60,7 @@ function App() {
           </FavoritesProvider>
         </SearchProvider>
       </BrowserRouter>
+     
     </>
   );
 }
