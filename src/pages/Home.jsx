@@ -5,6 +5,7 @@ import BookList from "../components/BookList";
 import Spinner from "../components/Spinner";
 import Modal from "../components/Modal";
 import BrowseDropdown from "../components/BrowseDropdown";
+import HeroSection from "../components/HeroSection";
 import { useBooks } from "../hooks/useBooks";
 import { SearchContext } from "../context/SearchContext";
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,22 +26,26 @@ const Home = () => {
   const [browseOpen, setBrowseOpen] = useState(false);
 
   return (
-    <div className="app-container">
+    <div className="app-container space-y-6">
       <Header />
 
-      <SearchBar
-        value={query}
-        onImmediateSearch={(q) => {
-          setQuery(q);
-          addRecent(q);
-        }}
-        onDebouncedChange={(q) => setQuery(q)}
-        recent={recent}
-        onPickRecent={(q) => {
-          setQuery(q);
-          addRecent(q);
-        }}
-        onClearRecent={clearRecent}
+      <HeroSection
+        searchSlot={
+          <SearchBar
+            value={query}
+            onImmediateSearch={(q) => {
+              setQuery(q);
+              addRecent(q);
+            }}
+            onDebouncedChange={(q) => setQuery(q)}
+            recent={recent}
+            onPickRecent={(q) => {
+              setQuery(q);
+              addRecent(q);
+            }}
+            onClearRecent={clearRecent}
+          />
+        }
       />
 
       <FiltersSection

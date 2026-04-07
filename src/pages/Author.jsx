@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Spinner from "../components/Spinner";
 import Header from "../components/Header";
-import { motion } from "framer-motion"; 
+import BookList from "../components/BookList";
+import { motion } from "framer-motion";
 
 function normalizeDescription(desc) {
   if (!desc) return null;
@@ -88,7 +89,7 @@ const Author = () => {
       ) : (
         <p className="empty-text">Biography not available.</p>
       )}
-      <motion.h3 
+      <motion.h3
         className="sub-title"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -99,34 +100,7 @@ const Author = () => {
       {works.length === 0 ? (
         <p className="empty-text">No works found.</p>
       ) : (
-        <motion.div 
-          className="book-grid"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          {works.map((w, index) => (
-            <motion.a 
-              key={w.key} 
-              className="book-card" 
-              href={`/book/${(w.key || "").split("/").pop()}`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -6 }}
-              transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
-            >
-              <motion.img
-                className="book-cover"
-                alt={`Cover of ${w.title}`}
-                src={w.cover_i ? `https://covers.openlibrary.org/b/id/${w.cover_i}-M.jpg` : "https://via.placeholder.com/200x250?text=No+Cover"}
-                whileHover={{ scale: 1.03 }}
-                transition={{ duration: 0.3 }}
-              />
-              <h4 className="book-title">{w.title}</h4>
-              {w.first_publish_year && <p className="details-meta">First published: {w.first_publish_year}</p>}
-            </motion.a>
-          ))}
-        </motion.div>
+        <BookList books={works} />
       )}
     </motion.div>
   );
