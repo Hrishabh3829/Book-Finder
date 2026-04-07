@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FavoritesContext } from "../context/FavoritesContext";
 import {
@@ -10,6 +10,13 @@ import {
   CardContent,
 } from "./ui/card";
 import { Button } from "./ui/button";
+import {
+  ContextMenu,
+  ContextMenuTrigger,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+} from "./ui/context-menu";
 
 const BookCard = ({ book, onSelect }) => {
   const coverUrl = book.cover_i
@@ -20,21 +27,39 @@ const BookCard = ({ book, onSelect }) => {
 
   const { isFav, addFavorite, removeFavorite } = useContext(FavoritesContext);
   const fav = isFav?.(book.key);
+  const navigate = useNavigate();
+
+  const handleToggleFavorite = (event) => {
+    event?.stopPropagation?.();
+    if (fav) {
+      removeFavorite(book.key);
+    } else {
+      const minimal = {
+        key: book.key,
+        title: book.title,
+        author_name: book.author_name,
+        cover_i: book.cover_i,
+      };
+      addFavorite(minimal);
+    }
+  };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -6 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-    >
-      <Card
-        className="group flex h-full cursor-pointer flex-col overflow-hidden border bg-card/95 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-        role="button"
-        tabIndex={0}
-        onClick={() => onSelect?.(book)}
-        onKeyDown={(e) => (e.key === "Enter" ? onSelect?.(book) : null)}
-      >
+    <ContextMenu>
+      <ContextMenuTrigger asChild>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover={{ y: -6 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          <Card
+            className="group flex h-full cursor-pointer flex-col overflow-hidden border bg-card/95 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+            role="button"
+            tabIndex={0}
+            onClick={() => onSelect?.(book)}
+            onKeyDown={(event) => (event.key === "Enter" ? onSelect?.(book) : null)}
+          >
         <div className="relative overflow-hidden">
           <motion.img
             src={coverUrl}
@@ -49,19 +74,7 @@ const BookCard = ({ book, onSelect }) => {
             size="icon-sm"
             variant={fav ? "secondary" : "outline"}
             className="absolute right-3 top-3 rounded-full bg-background/80 backdrop-blur border border-border/70 text-lg leading-none"
-            onClick={(e) => {
-              e.stopPropagation();
-              if (fav) removeFavorite(book.key);
-              else {
-                const minimal = {
-                  key: book.key,
-                  title: book.title,
-                  author_name: book.author_name,
-                  cover_i: book.cover_i,
-                };
-                addFavorite(minimal);
-              }
-            }}
+            onClick={handleToggleFavorite}
             aria-pressed={fav}
             aria-label={fav ? "Remove from favorites" : "Add to favorites"}
           >
@@ -123,8 +136,28 @@ const BookCard = ({ book, onSelect }) => {
             </span>
           </div>
         </CardContent>
-      </Card>
-    </motion.div>
+          </Card>
+        </motion.div>
+      </ContextMenuTrigger>
+
+      <ContextMenuContent>
+        <ContextMenuItem onClick={() => onSelect?.(book)}>
+          Quick preview
+        </ContextMenuItem>
+        <ContextMenuItem onClick={() => navigate(`/book/${workId}`)}>
+          Open book page
+        </ContextMenuItem>
+        {authorIds[0] && (
+          <ContextMenuItem onClick={() => navigate(`/author/${authorIds[0]}`)}>
+            View first author
+          </ContextMenuItem>
+        )}
+        <ContextMenuSeparator />
+        <ContextMenuItem onClick={handleToggleFavorite}>
+          {fav ? "Remove from favourites" : "Add to favourites"}
+        </ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 };
 
