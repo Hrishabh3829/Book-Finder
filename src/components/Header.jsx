@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { SearchContext } from "../context/SearchContext";
 import { Button } from "./ui/button";
+import { Skiper4 } from "./Skiper4";
 import { motion } from "framer-motion"; 
 
 const Header = () => {
@@ -43,17 +44,9 @@ const Header = () => {
           </Link>
         </h1>
       </div>
-      <motion.button 
-        className="theme-toggle" 
-        onClick={toggleDark} 
-        aria-pressed={dark} 
-        aria-label="Toggle dark mode"
-        whileHover={{ scale: 1.05, y: -2 }}
-        whileTap={{ scale: 0.95 }}
-        transition={{ duration: 0.2 }}
-      >
-        {dark ? "🌞 Light" : "🌙 Dark"}
-      </motion.button>
+      <div className="hidden md:block">
+        <Skiper4 isDark={dark} onToggle={toggleDark} />
+      </div>
     </motion.header>
   );
 };
