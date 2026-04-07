@@ -270,6 +270,21 @@ a:focus-visible {
   transform: translateY(0);
 }
 
+/* Gooey search input overrides (remove pink outline) */
+.gooey-search button,
+.gooey-search input {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.gooey-search button:focus,
+.gooey-search button:focus-visible,
+.gooey-search input:focus,
+.gooey-search input:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* ---------- BOOK GRID ---------- */
 .book-grid {
   display: grid;

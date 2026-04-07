@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Button } from "./ui/button";
+import { GooeyInput } from "./ui/gooey-input";
 
 const SearchBar = ({
   value = "",
@@ -11,61 +11,36 @@ const SearchBar = ({
   onClearRecent,
 }) => {
   const [query, setQuery] = useState(value);
-  const lastEmitted = useRef("");
-
   useEffect(() => setQuery(value), [value]);
-
-  useEffect(() => {
-    const id = setTimeout(() => {
-      if (query.trim() !== lastEmitted.current.trim()) {
-        lastEmitted.current = query;
-        onDebouncedChange?.(query);
-      }
-    }, 500);
-    return () => clearTimeout(id);
-  }, [query, onDebouncedChange]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    lastEmitted.current = query;
-    onImmediateSearch?.(query);
-  };
 
   return (
     <div>
-      <motion.form 
-        onSubmit={handleSubmit} 
-        className="search-container" 
-        role="search" 
+      <motion.div
+        className="search-container"
+        role="search"
         aria-label="Book search"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.2 }}
       >
-        <motion.input
-          type="text"
-          placeholder="Search for books..."
+        <GooeyInput
+          placeholder="Search..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="search-input"
-          aria-label="Search books by title"
-          whileFocus={{ scale: 1.02 }}
-          transition={{ duration: 0.2 }}
+          onValueChange={(next) => {
+            setQuery(next);
+          }}
+          onSearch={(next) => {
+            onImmediateSearch?.(next);
+          }}
+          classNames={{
+            trigger:
+              "ring-0 ring-transparent outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none focus-within:ring-0",
+            input:
+              "ring-0 ring-transparent outline-none focus-visible:ring-0 focus-visible:ring-offset-0 focus-visible:outline-none",
+          }}
+            className="gooey-search w-full max-w-xl"
         />
-        <motion.div 
-          whileHover={{ scale: 1.05, y: -2 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ duration: 0.2 }}
-        >
-          <Button
-            type="submit"
-            size="lg"
-            className="search-btn h-auto px-7 py-3 text-base font-semibold"
-          >
-            Search
-          </Button>
-        </motion.div>
-      </motion.form>
+      </motion.div>
 
       <AnimatePresence>
         {recent?.length ? (
