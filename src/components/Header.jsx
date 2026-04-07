@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
+import { BookOpen } from "lucide-react";
 import { SearchContext } from "../context/SearchContext";
 import { Button } from "./ui/button";
 import { Skiper4 } from "./Skiper4";
@@ -33,14 +34,15 @@ const Header = () => {
         <h1 className="app-title">
           <Link
             to="/"
-            className="link-button brand"
+            className="link-button brand brand-pill"
             onClick={() => {
               resetSearch();
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
             aria-label="Go home and clear search"
           >
-            📚 Book Finder
+            <BookOpen className="brand-icon" />
+            <span className="brand-text">Book Finder</span>
           </Link>
         </h1>
       </div>
