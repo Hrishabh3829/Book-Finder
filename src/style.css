@@ -68,7 +68,7 @@ a:focus-visible {
 .app-container { 
   max-width: 1280px; 
   margin: 0 auto; 
-  padding: 16px 20px 40px; 
+  padding: 8px 20px 32px; 
 }
 
 .main { 
@@ -82,8 +82,8 @@ a:focus-visible {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 16px 0;
-  margin-bottom: 24px;
+  padding: 8px 0;
+  margin-bottom: 16px;
 }
 
 .app-title {

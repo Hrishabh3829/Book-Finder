@@ -11,7 +11,7 @@ import { Button } from "./ui/button";
 
 const HeroSection = ({ searchSlot }) => {
   return (
-    <section className="mb-8 mt-4">
+    <section className="mb-6 mt-1">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

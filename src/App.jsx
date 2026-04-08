@@ -48,7 +48,7 @@ function RootShell() {
       <div className="min-h-dvh bg-background text-foreground">
         <PageLoader isLoading={showLoader} />
         <Toaster />
-        <main className="container mx-auto px-4 py-6">
+        <main className="container mx-auto px-4 py-3">
           <Outlet />
         </main>
       </div>
