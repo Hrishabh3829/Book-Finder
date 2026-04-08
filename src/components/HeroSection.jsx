@@ -17,34 +17,39 @@ import { CanvasTextDemo } from "./ui/canvas-test";
 const HeroSection = ({ searchSlot }) => {
   const featuredBooks = [
     {
-      id: "OL45883W",
+      id: "zyTCAlFPjgYC",
+      title: "The Google Story",
+      author: "David A. Vise",
+      coverUrl:
+        "https://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+    },
+    {
+      id: "OEBPSAAAQBAJ",
       title: "The Hobbit",
       author: "J.R.R. Tolkien",
-      coverId: 8231996,
+      coverUrl:
+        "https://books.google.com/books/content?id=OEBPSAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
     },
     {
-      id: "OL82563W",
-      title: "Marvel and a Wonder",
-      author: "Joe Meno",
-      coverId: 8350251,
-    },
-    {
-      id: "OL20600W",
-      title: "Beautiful Ones",
-      author: "Emily Hoyse",
-      coverId: 10523323,
-    },
-    {
-      id: "OL276560W",
+      id: "PGR2AwAAQBAJ",
       title: "The Great Gatsby",
       author: "F. Scott Fitzgerald",
-      coverId: 10521211,
+      coverUrl:
+        "https://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
     },
     {
-      id: "OL93553W",
+      id: "1a2XAwAAQBAJ",
       title: "Pride and Prejudice",
       author: "Jane Austen",
-      coverId: 10519526,
+      coverUrl:
+        "https://books.google.com/books/content?id=1a2XAwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+    },
+    {
+      id: "m8dPPgAACAAJ",
+      title: "1984",
+      author: "George Orwell",
+      coverUrl:
+        "https://books.google.com/books/content?id=m8dPPgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
     },
   ];
 
@@ -112,7 +117,7 @@ const HeroSection = ({ searchSlot }) => {
                         <div className="flex flex-col items-center gap-2">
                           <div className="w-52 overflow-hidden rounded-3xl bg-card/90 ring-1 ring-border/60 shadow-sm transition-transform duration-200 group-hover:-translate-y-1 group-hover:shadow-md">
                             <img
-                              src={`https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`}
+                              src={book.coverUrl}
                               alt={`Cover of ${book.title}`}
                               loading="lazy"
                               className="aspect-[3/4] w-full object-cover"

@@ -16,6 +16,21 @@ const Category = () => {
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 12;
 
+  const mapVolume = (item) => {
+    const info = item?.volumeInfo || {};
+    const year = parseInt(String(info.publishedDate || "").slice(0, 4), 10);
+    const thumbnail = info.imageLinks?.thumbnail || info.imageLinks?.smallThumbnail || "";
+    return {
+      id: item.id,
+      key: item.id,
+      title: info.title || "Untitled",
+      author_name: info.authors || [],
+      publishedYear: Number.isNaN(year) ? 0 : year,
+      thumbnail: thumbnail.replace("http://", "https://"),
+      language: info.language || "",
+    };
+  };
+
   useEffect(() => {
     let cancelled = false;
     async function run() {
@@ -23,19 +38,16 @@ const Category = () => {
       setError("");
       setBooks([]);
       try {
-        const url = `https://openlibrary.org/subjects/${encodeURIComponent(name)}.json?limit=50`;
+        const apiKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
+        if (!apiKey) throw new Error("Missing Google Books API key.");
+        const url = `https://www.googleapis.com/books/v1/volumes?q=subject:${encodeURIComponent(
+          name
+        )}&maxResults=40&printType=books&key=${apiKey}&fields=items(id,volumeInfo/title,volumeInfo/authors,volumeInfo/publishedDate,volumeInfo/imageLinks,volumeInfo/language)`;
         const res = await fetch(url);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
-        const works = Array.isArray(data.works) ? data.works : [];
-        const normalized = works.map((w) => ({
-          key: w.key,
-          title: w.title,
-          author_name: (w.authors || []).map((a) => a.name),
-          author_key: (w.authors || []).map((a) => (a.key || "").split("/").pop()),
-          cover_i: w.cover_id,
-          first_publish_year: w.first_publish_year,
-        }));
+        const items = Array.isArray(data.items) ? data.items : [];
+        const normalized = items.map(mapVolume);
         if (!cancelled) {
           setBooks(normalized);
           setPage(1);

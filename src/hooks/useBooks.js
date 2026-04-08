@@ -1,7 +1,41 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { SearchContext } from "../context/SearchContext";
 
-const MAX_RESULTS = 50; 
+const MAX_RESULTS = 40;
+const GOOGLE_BOOKS_BASE = "https://www.googleapis.com/books/v1/volumes";
+
+function getPublishedYear(dateString) {
+  if (!dateString) return 0;
+  const year = parseInt(String(dateString).slice(0, 4), 10);
+  return Number.isNaN(year) ? 0 : year;
+}
+
+function toHttps(url) {
+  if (!url) return "";
+  return url.startsWith("http://") ? url.replace("http://", "https://") : url;
+}
+
+function mapVolume(item) {
+  const info = item?.volumeInfo || {};
+  const thumbnail =
+    info.imageLinks?.thumbnail ||
+    info.imageLinks?.smallThumbnail ||
+    "";
+
+  return {
+    id: item.id,
+    key: item.id,
+    title: info.title || "Untitled",
+    author_name: info.authors || [],
+    publishedDate: info.publishedDate || "",
+    publishedYear: getPublishedYear(info.publishedDate),
+    description: normalizeDescription(info.description),
+    categories: info.categories || [],
+    language: info.language || "",
+    pageCount: info.pageCount || null,
+    thumbnail: toHttps(thumbnail),
+  };
+}
 
 function normalizeDescription(desc) {
   if (!desc) return "No description available.";
@@ -32,18 +66,24 @@ export function useBooks() {
     setError("");
 
     try {
-      const url = `https://openlibrary.org/search.json?title=${encodeURIComponent(q)}`;
+      const apiKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
+      const keyParam = apiKey ? `&key=${apiKey}` : "";
+      const url = `${GOOGLE_BOOKS_BASE}?q=${encodeURIComponent(
+        q
+      )}&maxResults=${MAX_RESULTS}&printType=books${keyParam}&fields=items(id,volumeInfo/title,volumeInfo/authors,volumeInfo/publishedDate,volumeInfo/description,volumeInfo/categories,volumeInfo/imageLinks,volumeInfo/language,volumeInfo/pageCount)`;
       const res = await fetch(url, { signal: controller.signal });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      const docs = Array.isArray(data.docs) ? data.docs : [];
+      const items = Array.isArray(data.items) ? data.items : [];
       // For no results, don't set error; the UI will show a friendly empty state
       setError("");
-      setRawBooks(docs.slice(0, MAX_RESULTS));
+      setRawBooks(items.map(mapVolume));
     } catch (e) {
       if (e.name === "AbortError") return; // ignore aborted
       setError(
-        e.message?.includes("NetworkError")
+        e.message?.includes("Google Books API key")
+          ? "Missing Google Books API key. Add VITE_GOOGLE_BOOKS_API_KEY to .env."
+          : e.message?.includes("NetworkError")
           ? "Network error — please check your connection."
           : "Something went wrong. Please try again later."
       );
@@ -61,10 +101,10 @@ export function useBooks() {
   const books = useMemo(() => {
     let list = [...rawBooks];
 
-    const getYear = (b) => b.first_publish_year || (b.publish_year?.[0] ?? 0);
+    const getYear = (b) => b.publishedYear || 0;
 
     if (filters.onlyWithCover) {
-      list = list.filter((b) => Boolean(b.cover_i));
+      list = list.filter((b) => Boolean(b.thumbnail));
     }
 
     if (filters.author && filters.author.trim()) {
@@ -85,7 +125,7 @@ export function useBooks() {
 
     if (filters.language && filters.language.trim()) {
       const lang = filters.language.trim().toLowerCase();
-      list = list.filter((b) => (b.language || []).some((l) => (l || "").toLowerCase() === lang));
+      list = list.filter((b) => (b.language || "").toLowerCase() === lang);
     }
 
     if (filters.sortByYear) {
@@ -99,20 +139,23 @@ export function useBooks() {
     return list;
   }, [rawBooks, filters]);
 
-  // Fetch details for a selected book (works endpoint)
+  // Fetch details for a selected book (Google Books volume)
   const fetchDetails = useCallback(async (book) => {
     try {
-      const key = book?.key || ""; // e.g., /works/OL12345W
-      if (!key.includes("/works/")) return null;
-      const url = `https://openlibrary.org${key}.json`;
+      const apiKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
+      if (!apiKey) throw new Error("Missing Google Books API key.");
+      const volumeId = book?.id || book?.key;
+      if (!volumeId) return null;
+      const url = `${GOOGLE_BOOKS_BASE}/${volumeId}?key=${apiKey}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error("Failed to load book details");
       const data = await res.json();
+      const info = data?.volumeInfo || {};
       return {
-        title: data.title,
-        description: normalizeDescription(data.description),
-        first_publish_year: data.first_publish_date || data.first_publish_year,
-        subjects: data.subjects || [],
+        title: info.title,
+        description: normalizeDescription(info.description),
+        first_publish_year: info.publishedDate,
+        subjects: info.categories || [],
       };
     } catch {
       return null;

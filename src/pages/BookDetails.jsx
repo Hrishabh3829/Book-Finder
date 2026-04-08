@@ -27,7 +27,9 @@ const BookDetails = () => {
       setError("");
       setData(null);
       try {
-        const res = await fetch(`https://openlibrary.org/works/${id}.json`);
+        const apiKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
+        if (!apiKey) throw new Error("Missing Google Books API key.");
+        const res = await fetch(`https://www.googleapis.com/books/v1/volumes/${id}?key=${apiKey}`);
         if (!res.ok) throw new Error("HTTP " + res.status);
         const json = await res.json();
         if (!cancelled) setData(json);
@@ -59,10 +61,15 @@ const BookDetails = () => {
   if (error) return <p className="error-text" role="alert">{error}</p>;
   if (!data) return <p className="empty-text">Not available.</p>;
 
-  const title = data.title;
-  const description = normalizeDescription(data.description);
-  const subjects = data.subjects || [];
-  const firstPublished = data.first_publish_date || data.first_publish_year;
+  const info = data.volumeInfo || {};
+  const title = info.title || "Untitled";
+  const description = normalizeDescription(info.description);
+  const subjects = info.categories || [];
+  const firstPublished = info.publishedDate || "";
+  const coverUrl = (info.imageLinks?.thumbnail || info.imageLinks?.smallThumbnail || "").replace(
+    "http://",
+    "https://"
+  );
 
   return (
     <motion.div 
@@ -72,24 +79,35 @@ const BookDetails = () => {
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <Header />
-      <motion.h2 
-        className="page-title"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-      >
-        {title}
-      </motion.h2>
-      {firstPublished ? (
-        <motion.p 
-          className="details-meta"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          First published: {firstPublished}
-        </motion.p>
-      ) : null}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+        {coverUrl ? (
+          <img
+            src={coverUrl}
+            alt={`Cover of ${title}`}
+            className="h-40 w-28 rounded-xl object-cover shadow-sm"
+          />
+        ) : null}
+        <div>
+          <motion.h2 
+            className="page-title"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+          >
+            {title}
+          </motion.h2>
+          {firstPublished ? (
+            <motion.p 
+              className="details-meta"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              Published: {firstPublished}
+            </motion.p>
+          ) : null}
+        </div>
+      </div>
       <motion.p 
         className="details-desc"
         initial={{ opacity: 0 }}

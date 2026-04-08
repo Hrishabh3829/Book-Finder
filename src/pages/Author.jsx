@@ -6,57 +6,58 @@ import BookList from "../components/BookList";
 import Pagination from "../components/Pagination";
 import { motion } from "framer-motion";
 
-function normalizeDescription(desc) {
-  if (!desc) return null;
-  if (typeof desc === "string") return desc;
-  if (typeof desc === "object" && desc.value) return desc.value;
-  return null;
-}
-
 const Author = () => {
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [bio, setBio] = useState(null);
   const [name, setName] = useState("");
   const [works, setWorks] = useState([]);
   const [page, setPage] = useState(1);
   const PAGE_SIZE = 12;
+
+  const mapVolume = (item) => {
+    const info = item?.volumeInfo || {};
+    const year = parseInt(String(info.publishedDate || "").slice(0, 4), 10);
+    const thumbnail = info.imageLinks?.thumbnail || info.imageLinks?.smallThumbnail || "";
+    return {
+      id: item.id,
+      key: item.id,
+      title: info.title || "Untitled",
+      author_name: info.authors || [],
+      publishedYear: Number.isNaN(year) ? 0 : year,
+      thumbnail: thumbnail.replace("http://", "https://"),
+      language: info.language || "",
+    };
+  };
 
   useEffect(() => {
     let cancelled = false;
     async function run() {
       setLoading(true);
       setError("");
-      setBio(null);
-      setName("");
-      setWorks([]);
-      try {
-        const [aRes, wRes] = await Promise.all([
-          fetch(`https://openlibrary.org/authors/${id}.json`),
-          fetch(`https://openlibrary.org/authors/${id}/works.json?limit=20`),
-        ]);
-        if (!aRes.ok) throw new Error("author HTTP " + aRes.status);
-        if (!wRes.ok) throw new Error("works HTTP " + wRes.status);
-        const aJson = await aRes.json();
-        const wJson = await wRes.json();
-        if (!cancelled) {
-          setName(aJson.name || id);
-          setBio(normalizeDescription(aJson.bio));
-          const list = (wJson.entries || []).map((w) => ({
-            key: w.key,
-            title: w.title,
-            first_publish_year: w.first_publish_date || w.first_publish_year,
-            cover_i: w.covers?.[0],
-          }));
-          setWorks(list);
-          setPage(1);
+        setName("");
+        setWorks([]);
+        try {
+          const apiKey = import.meta.env.VITE_GOOGLE_BOOKS_API_KEY;
+          if (!apiKey) throw new Error("Missing Google Books API key.");
+          const decodedName = decodeURIComponent(id || "");
+          setName(decodedName || id);
+          const url = `https://www.googleapis.com/books/v1/volumes?q=inauthor:${encodeURIComponent(
+            decodedName
+          )}&maxResults=40&printType=books&key=${apiKey}&fields=items(id,volumeInfo/title,volumeInfo/authors,volumeInfo/publishedDate,volumeInfo/imageLinks,volumeInfo/language)`;
+          const res = await fetch(url);
+          if (!res.ok) throw new Error("author HTTP " + res.status);
+          const json = await res.json();
+          const items = Array.isArray(json.items) ? json.items : [];
+          if (!cancelled) {
+            setWorks(items.map(mapVolume));
+            setPage(1);
+          }
+        } catch (e) {
+          if (!cancelled) setError("Failed to load author.");
+        } finally {
+          if (!cancelled) setLoading(false);
         }
-      } catch (e) {
-        if (!cancelled) setError("Failed to load author.");
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
     }
     run();
     return () => { cancelled = true; };
@@ -87,18 +88,14 @@ const Author = () => {
       >
         {name}
       </motion.h2>
-      {bio ? (
-        <motion.p 
-          className="details-desc"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          {bio}
-        </motion.p>
-      ) : (
-        <p className="empty-text">Biography not available.</p>
-      )}
+      <motion.p 
+        className="details-desc"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+      >
+        Books by {name}
+      </motion.p>
       <motion.h3
         className="sub-title"
         initial={{ opacity: 0 }}
