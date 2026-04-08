@@ -128,6 +128,15 @@ export function useBooks() {
       list = list.filter((b) => (b.language || "").toLowerCase() === lang);
     }
 
+    if (!filters.onlyWithCover) {
+      list.sort((a, b) => {
+        const aHas = Boolean(a.thumbnail);
+        const bHas = Boolean(b.thumbnail);
+        if (aHas === bHas) return 0;
+        return aHas ? -1 : 1;
+      });
+    }
+
     if (filters.sortByYear) {
       list.sort((a, b) => {
         const ay = getYear(a);

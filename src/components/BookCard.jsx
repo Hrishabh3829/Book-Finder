@@ -21,11 +21,18 @@ import {
 } from "./ui/context-menu";
 
 const BookCard = ({ book, onSelect }) => {
-  const coverUrl =
+  const volumeId = book.id || book.key;
+  const fallbackCoverUrl = volumeId
+    ? `https://books.google.com/books/content?id=${volumeId}&printsec=frontcover&img=1&zoom=4&source=gbs_api`
+    : "";
+  const rawCoverUrl =
     book.thumbnail ||
     book.coverUrl ||
+    fallbackCoverUrl ||
     "https://via.placeholder.com/200x250?text=No+Cover";
-  const volumeId = book.id || book.key;
+  const coverUrl = rawCoverUrl.includes("books.google.com/books/content")
+    ? rawCoverUrl.replace(/zoom=\d+/, "zoom=4")
+    : rawCoverUrl;
   const authorNames = book.author_name || book.authors || [];
 
   const { isFav, addFavorite, removeFavorite } = useContext(FavoritesContext);

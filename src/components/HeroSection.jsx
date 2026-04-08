@@ -17,39 +17,40 @@ import { CanvasTextDemo } from "./ui/canvas-test";
 const HeroSection = ({ searchSlot }) => {
   const featuredBooks = [
     {
-      id: "zyTCAlFPjgYC",
-      title: "The Google Story",
-      author: "David A. Vise",
-      coverUrl:
-        "https://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&source=gbs_api",
-    },
-    {
-      id: "OEBPSAAAQBAJ",
-      title: "The Hobbit",
-      author: "J.R.R. Tolkien",
-      coverUrl:
-        "https://books.google.com/books/content?id=OEBPSAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
-    },
-    {
-      id: "PGR2AwAAQBAJ",
-      title: "The Great Gatsby",
-      author: "F. Scott Fitzgerald",
-      coverUrl:
-        "https://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
-    },
-    {
       id: "1a2XAwAAQBAJ",
-      title: "Pride and Prejudice",
-      author: "Jane Austen",
+      title: "Captain America",
+      author: "Stefan Petrucha",
       coverUrl:
-        "https://books.google.com/books/content?id=1a2XAwAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "https://books.google.com/books/publisher/content?id=3u3eDAAAQBAJ&printsec=frontcover&img=1&zoom=4&edge=curl&imgtk=AFLRE701cw44cMUc9GlLRPZF3bZDeXm7lTEPd3kCAXFjVZOJdbcifqIgj3kDDOpJv_wtPSs_7lFeiNgvZN0KhdDdEmc2NvKni8IfACjQYQ84bN398fpMSAP8PD9HhnjlRATX6C2O4ehy&source=gbs_api",
     },
     {
-      id: "m8dPPgAACAAJ",
-      title: "1984",
-      author: "George Orwell",
+      id: "LimgEAAAQBAJ",
+      title: "Doglapan",
+      author: "Ashneer Grover",
       coverUrl:
-        "https://books.google.com/books/content?id=m8dPPgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "https://books.google.com/books/publisher/content?id=LimgEAAAQBAJ&printsec=frontcover&img=1&zoom=4&edge=curl&imgtk=AFLRE71XrpptLux0Ht4u5Bq1W7tbDqjAKTiYBHTlqH9MQC4P7cP2im4eIwwVWgeTVMLpv9HI7_NG3XCfFWMSnI5NcqiSxbI4YF-0Nw0nDdDR7zMUUkVyLBEEeb-NARd-HJ-NrzakYxiB&source=gbs_api",
+    },
+    {
+      id: "E2swDQAAQBAJ",
+      title: "Harry Potter and the Philosopher's Stone",
+      author: "J. K. Rowling",
+      coverUrl:
+        "https://books.google.com/books/publisher/content?id=E2swDQAAQBAJ&printsec=frontcover&img=1&zoom=4&imgtk=AFLRE70ppRfdB5n924-7nOg3nQUuII_jnEPojp61eqajaki8aOIGU5Fsxiuk0U6Ijm6MQRlBWK6NXa74uBt7e2EGU064QhSq4Jk-vCc7VH2mChUkPEarSg6j0jfeRbmdg01aVkNCSjlc&source=gbs_api",
+    },
+    {
+      id: "inNrNS_c6ToC",
+      title: "Pokemon",
+      author: "Maria S. Barbo",
+      coverUrl:
+        "https://books.google.com/books/content?id=inNrNS_c6ToC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71zchmWr0yuwTKdikSf5l5U27JGXtDKu4BKdT5oYezlE05S0oNyP7Tr-XUDcUFdK1ny_f-QAfa-gFxp0mF7Q9q2CUO0c32SPnPslfp3TnPHJbGzDc2pA2E2toyq3e-gUoJTlGL9&source=gbs_api",
+    },
+    
+    {
+      id: "VUvDzgEACAAJ",
+      title: "Do Epic Shit",
+      author: "Ankur Warikoo",
+      coverUrl:
+        "https://books.google.com/books/content?id=VUvDzgEACAAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71hcp7DmE-pjA2fbBlnJ5Py1z1yQcogJu46alVEAH70xSBTQMNAP8_XfiVToJZlGG1Bp39Fxq4wfX0r4h9hNyeuTuWVUPD8OFC4LCNSi_TvD9U_B9NHaidTEWy6Lti0H-xWfd6J&source=gbs_api",
     },
   ];
 
