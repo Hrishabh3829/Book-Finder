@@ -137,6 +137,10 @@ a:focus-visible {
   transform: translateX(-2px);
 }
 
+.back-row {
+  margin-bottom: 8px;
+}
+
 .brand { 
   text-decoration: none; 
   color: var(--primary);
@@ -196,6 +200,7 @@ a:focus-visible {
     display: flex;
     justify-content: flex-start;
     margin-top: 6px;
+    margin-bottom: 8px;
   }
 }
 

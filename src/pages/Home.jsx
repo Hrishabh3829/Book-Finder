@@ -31,6 +31,7 @@ import {
 import { useBooks } from "../hooks/useBooks";
 import { SearchContext } from "../context/SearchContext";
 import { motion } from "framer-motion";
+import "../filters.css";
 import { toast } from "sonner";
 
 const Home = () => {
@@ -337,6 +338,7 @@ const FiltersSection = ({ filters, setFilters, resetFilters, resultCount }) => {
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
                     <YearDatePicker
+                      className="filters-year"
                       label="Year from"
                       value={filters.yearFrom}
                       onChange={(year) =>
@@ -345,6 +347,7 @@ const FiltersSection = ({ filters, setFilters, resetFilters, resultCount }) => {
                       placeholder="From year"
                     />
                     <YearDatePicker
+                      className="filters-year"
                       label="Year to"
                       value={filters.yearTo}
                       onChange={(year) =>
