@@ -36,7 +36,11 @@ export function SearchProvider({ children }) {
     localStorage.removeItem("recentSearches");
   }, []);
 
-  const [dark, setDark] = useState(() => localStorage.getItem("theme") === "dark");
+  const [dark, setDark] = useState(() => {
+    const storedTheme = localStorage.getItem("theme");
+    if (storedTheme === null) return true;
+    return storedTheme === "dark";
+  });
   useEffect(() => {
     document.body.classList.toggle("dark", dark);
     document.documentElement.classList.toggle("dark", dark);

@@ -1,0 +1,24 @@
+.filters-year {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.filters-year .year-picker-trigger {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+.filters-year .year-picker-trigger[data-empty="true"] {
+  color: var(--muted);
+}
+
+.filters-year .year-picker-icon {
+  opacity: 0.7;
+}

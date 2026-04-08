@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import { Calendar } from "./ui/calendar";
 import { Popover, PopoverTrigger, PopoverContent } from "./ui/popover";
 
-const YearDatePicker = ({ label, value, onChange, placeholder }) => {
+const YearDatePicker = ({ label, value, onChange, placeholder, className = "" }) => {
   const [date, setDate] = React.useState();
 
   React.useEffect(() => {
@@ -26,7 +26,7 @@ const YearDatePicker = ({ label, value, onChange, placeholder }) => {
   };
 
   return (
-    <div className="space-y-1">
+    <div className={`space-y-1 ${className}`.trim()}>
       {label && (
         <p className="text-xs font-medium text-muted-foreground">{label}</p>
       )}
@@ -36,7 +36,7 @@ const YearDatePicker = ({ label, value, onChange, placeholder }) => {
             type="button"
             variant="outline"
             size="sm"
-            className="w-full justify-between text-left font-normal"
+            className="year-picker-trigger w-full justify-between text-left font-normal"
             data-empty={!date}
           >
             {date ? (
@@ -46,7 +46,7 @@ const YearDatePicker = ({ label, value, onChange, placeholder }) => {
                 {placeholder || "Pick year"}
               </span>
             )}
-            <ChevronDownIcon className="ml-2 size-3.5" />
+            <ChevronDownIcon className="year-picker-icon ml-2 size-3.5" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-2" align="start">
