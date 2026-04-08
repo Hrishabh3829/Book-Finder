@@ -169,6 +169,36 @@ a:focus-visible {
   letter-spacing: -0.02em;
 }
 
+@media (max-width: 640px) {
+  .app-header {
+    gap: 10px;
+  }
+
+  .header-left {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .app-title {
+    font-size: 1.25rem;
+  }
+
+  .brand-text {
+    white-space: nowrap;
+  }
+
+  .back-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+
+  .back-row {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 6px;
+  }
+}
+
 
 .brand-pill:focus,
 .brand-pill:focus-visible {
