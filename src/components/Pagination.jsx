@@ -1,6 +1,13 @@
 import { Button } from "./ui/button";
 
-const Pagination = ({ page, pageSize = 12, total, onPageChange }) => {
+const Pagination = ({
+  page,
+  pageSize = 12,
+  total,
+  onPageChange,
+  onPageSizeChange,
+  pageSizeOptions = [5, 10, 20],
+}) => {
   const totalPages = Math.max(1, Math.ceil((total || 0) / pageSize));
 
   if (totalPages <= 1) return null;
@@ -27,7 +34,21 @@ const Pagination = ({ page, pageSize = 12, total, onPageChange }) => {
         <span className="font-medium text-foreground">{total}</span>{" "}
         results • Page {current} of {totalPages}
       </div>
-      <div className="inline-flex items-center gap-1">
+      <div className="inline-flex items-center gap-2">
+        <label className="inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-xs text-foreground">
+          <select
+            className="bg-transparent text-xs font-medium outline-none"
+            value={pageSize}
+            onChange={(event) => onPageSizeChange?.(Number(event.target.value))}
+            aria-label="Results per page"
+          >
+            {pageSizeOptions.map((size) => (
+              <option key={size} value={size}>
+                {size} / page
+              </option>
+            ))}
+          </select>
+        </label>
         <Button
           variant="outline"
           size="icon-sm"

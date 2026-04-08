@@ -52,11 +52,11 @@ const Home = () => {
   const closeDetails = () => setDetails({ open: false, loading: false, data: null });
 
   const [page, setPage] = useState(1);
-  const PAGE_SIZE = 12;
+  const [pageSize, setPageSize] = useState(12);
 
   useEffect(() => {
     setPage(1);
-  }, [query, filters]);
+  }, [query, filters, pageSize]);
 
   useEffect(() => {
     const trimmed = query.trim();
@@ -66,10 +66,10 @@ const Home = () => {
   }, [books.length, error, loading, query]);
 
   const total = books.length;
-  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const currentPage = Math.min(page, totalPages);
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const currentBooks = books.slice(start, start + PAGE_SIZE);
+  const start = (currentPage - 1) * pageSize;
+  const currentBooks = books.slice(start, start + pageSize);
 
   return (
     <div className="app-container space-y-6">
@@ -131,12 +131,13 @@ const Home = () => {
       ) : (
         <>
           <BookList books={currentBooks} onSelect={openDetails} />
-          {!loading && !error && total > PAGE_SIZE && (
+          {!loading && !error && total > pageSize && (
             <Pagination
               page={currentPage}
-              pageSize={PAGE_SIZE}
+              pageSize={pageSize}
               total={total}
               onPageChange={setPage}
+              onPageSizeChange={setPageSize}
             />
           )}
         </>

@@ -13,14 +13,35 @@ const Header = () => {
   const showBack = location.pathname !== "/";
 
   return (
-    <motion.header 
-      className="app-header"
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-    >
-      <div className="header-left">
-        {showBack && (
+    <div className="header-stack">
+      <motion.header 
+        className="app-header"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <div className="header-left">
+          <h1 className="app-title">
+            <Link
+              to="/"
+              className="link-button brand brand-pill"
+              onClick={() => {
+                resetSearch();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              aria-label="Go home and clear search"
+            >
+              <BookOpen className="brand-icon" />
+              <span className="brand-text">Book Finder</span>
+            </Link>
+          </h1>
+        </div>
+        <div>
+          <Skiper4 isDark={dark} onToggle={toggleDark} />
+        </div>
+      </motion.header>
+      {showBack && (
+        <div className="back-row">
           <Button
             variant="outline"
             size="sm"
@@ -30,26 +51,9 @@ const Header = () => {
           >
             ← Back
           </Button>
-        )}
-        <h1 className="app-title">
-          <Link
-            to="/"
-            className="link-button brand brand-pill"
-            onClick={() => {
-              resetSearch();
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            aria-label="Go home and clear search"
-          >
-            <BookOpen className="brand-icon" />
-            <span className="brand-text">Book Finder</span>
-          </Link>
-        </h1>
-      </div>
-      <div className="hidden md:block">
-        <Skiper4 isDark={dark} onToggle={toggleDark} />
-      </div>
-    </motion.header>
+        </div>
+      )}
+    </div>
   );
 };
 

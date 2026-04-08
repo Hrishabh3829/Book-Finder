@@ -21,26 +21,37 @@ import {
 } from "./ui/context-menu";
 
 const BookCard = ({ book, onSelect }) => {
-  const coverUrl = book.cover_i
-    ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-    : "https://via.placeholder.com/200x250?text=No+Cover";
-  const workId = (book.key || "").split("/").pop();
-  const authorIds = book.author_key || [];
+  const volumeId = book.id || book.key;
+  const fallbackCoverUrl = volumeId
+    ? `https://books.google.com/books/content?id=${volumeId}&printsec=frontcover&img=1&zoom=4&source=gbs_api`
+    : "";
+  const rawCoverUrl =
+    book.thumbnail ||
+    book.coverUrl ||
+    fallbackCoverUrl ||
+    "https://via.placeholder.com/200x250?text=No+Cover";
+  const coverUrl = rawCoverUrl.includes("books.google.com/books/content")
+    ? rawCoverUrl.replace(/zoom=\d+/, "zoom=4")
+    : rawCoverUrl;
+  const authorNames = book.author_name || book.authors || [];
 
   const { isFav, addFavorite, removeFavorite } = useContext(FavoritesContext);
-  const fav = isFav?.(book.key);
+  const favKey = book.key || volumeId;
+  const fav = isFav?.(favKey);
   const navigate = useNavigate();
 
   const handleToggleFavorite = (event) => {
     event?.stopPropagation?.();
     if (fav) {
-      removeFavorite(book.key);
+      removeFavorite(favKey);
     } else {
       const minimal = {
-        key: book.key,
+        key: favKey,
+        id: volumeId,
         title: book.title,
-        author_name: book.author_name,
-        cover_i: book.cover_i,
+        author_name: authorNames,
+        thumbnail: coverUrl,
+        publishedYear: book.publishedYear || book.first_publish_year,
       };
       addFavorite(minimal);
     }
@@ -66,7 +77,7 @@ const BookCard = ({ book, onSelect }) => {
           <motion.img
             src={coverUrl}
             alt={`Cover of ${book.title}${
-              book.author_name ? ` by ${book.author_name[0]}` : ""
+              authorNames.length ? ` by ${authorNames[0]}` : ""
             }`}
             className="aspect-[3/4] w-full object-cover"
             whileHover={{ scale: 1.04 }}
@@ -98,33 +109,25 @@ const BookCard = ({ book, onSelect }) => {
         <CardHeader className="space-y-1 px-4 pt-3 pb-1">
           <CardTitle className="line-clamp-2 text-base font-semibold">
             <Link
-              to={`/book/${workId}`}
+              to={`/book/${volumeId}`}
               className="transition-colors hover:text-primary"
             >
               {book.title}
             </Link>
           </CardTitle>
           <CardDescription className="line-clamp-1 text-xs">
-            {book.author_name ? (
-              book.author_name.map((name, idx) => {
-                const id = authorIds[idx];
-                return id ? (
-                  <span key={id}>
-                    <Link
-                      to={`/author/${id}`}
-                      className="hover:text-primary underline-offset-4 hover:underline"
-                    >
-                      {name}
-                    </Link>
-                    {idx < book.author_name.length - 1 ? ", " : ""}
-                  </span>
-                ) : (
-                  <span key={`${name}-${idx}`}>
+            {authorNames.length ? (
+              authorNames.map((name, idx) => (
+                <span key={`${name}-${idx}`}>
+                  <Link
+                    to={`/author/${encodeURIComponent(name)}`}
+                    className="hover:text-primary underline-offset-4 hover:underline"
+                  >
                     {name}
-                    {idx < book.author_name.length - 1 ? ", " : ""}
-                  </span>
-                );
-              })
+                  </Link>
+                  {idx < authorNames.length - 1 ? ", " : ""}
+                </span>
+              ))
             ) : (
               "Unknown author"
             )}
@@ -132,8 +135,8 @@ const BookCard = ({ book, onSelect }) => {
         </CardHeader>
 
         <CardContent className="mt-auto space-y-2 px-4 pb-4 pt-1 text-xs text-muted-foreground">
-          {book.first_publish_year && (
-            <p>First published: {book.first_publish_year}</p>
+          {(book.publishedYear || book.first_publish_year) && (
+            <p>First published: {book.publishedYear || book.first_publish_year}</p>
           )}
           <div className="flex items-center justify-between gap-3 pt-1">
             <Button
@@ -142,10 +145,10 @@ const BookCard = ({ book, onSelect }) => {
               className="rounded-full px-3 text-xs"
               asChild
             >
-              <Link to={`/book/${workId}`}>View details</Link>
+              <Link to={`/book/${volumeId}`}>View details</Link>
             </Button>
             <span className="text-[0.68rem] uppercase tracking-wide text-muted-foreground/80">
-              Open Library
+              Google Books
             </span>
           </div>
         </CardContent>
@@ -157,11 +160,13 @@ const BookCard = ({ book, onSelect }) => {
         <ContextMenuItem onClick={() => onSelect?.(book)}>
           Quick preview
         </ContextMenuItem>
-        <ContextMenuItem onClick={() => navigate(`/book/${workId}`)}>
+        <ContextMenuItem onClick={() => navigate(`/book/${volumeId}`)}>
           Open book page
         </ContextMenuItem>
-        {authorIds[0] && (
-          <ContextMenuItem onClick={() => navigate(`/author/${authorIds[0]}`)}>
+        {authorNames[0] && (
+          <ContextMenuItem
+            onClick={() => navigate(`/author/${encodeURIComponent(authorNames[0])}`)}
+          >
             View first author
           </ContextMenuItem>
         )}
