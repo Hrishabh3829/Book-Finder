@@ -100,7 +100,7 @@ const HeroSection = ({ searchSlot }) => {
             >
               <Carousel
                 opts={{ align: "start" }}
-                className="w-full max-w-md mr-2"
+                className="w-full max-w-lg mr-2"
               >
                 <CarouselContent className="-ml-3">
                   {featuredBooks.map((book) => (
@@ -110,7 +110,7 @@ const HeroSection = ({ searchSlot }) => {
                     >
                       <Link to={`/book/${book.id}`} className="group block">
                         <div className="flex flex-col items-center gap-2">
-                          <div className="w-40 overflow-hidden rounded-2xl bg-card/90 ring-1 ring-border/60 shadow-sm transition-transform duration-200 group-hover:-translate-y-1 group-hover:shadow-md">
+                          <div className="w-52 overflow-hidden rounded-3xl bg-card/90 ring-1 ring-border/60 shadow-sm transition-transform duration-200 group-hover:-translate-y-1 group-hover:shadow-md">
                             <img
                               src={`https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg`}
                               alt={`Cover of ${book.title}`}
@@ -119,10 +119,10 @@ const HeroSection = ({ searchSlot }) => {
                             />
                           </div>
                           <div className="text-center">
-                            <p className="text-xs font-semibold text-foreground">
+                            <p className="text-sm font-semibold text-foreground">
                               {book.title}
                             </p>
-                            <p className="text-[0.65rem] text-muted-foreground">
+                            <p className="text-xs text-muted-foreground">
                               {book.author}
                             </p>
                           </div>
