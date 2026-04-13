@@ -149,7 +149,10 @@ const Home = () => {
           <div className="center"><Spinner /></div>
         ) : details.data ? (
           <div className="details">
-            <p className="details-desc">{details.data.description}</p>
+            <div
+              className="details-desc"
+              dangerouslySetInnerHTML={{ __html: details.data.description }}>
+            </div>
             {details.data.first_publish_year && (
               <p className="details-meta">First published: {details.data.first_publish_year}</p>
             )}
