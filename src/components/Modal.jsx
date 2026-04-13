@@ -73,7 +73,10 @@ const Modal = ({ open, title, children, onClose }) => {
               ✕
             </motion.button>
           </div>
-          <div className="modal-body">{children}</div>
+          <div
+            className="modal-body"
+            dangerouslySetInnerHTML={{ __html: children }}>
+          </div>
         </motion.div>
       </motion.div>
     </AnimatePresence>
