@@ -113,8 +113,8 @@ const BookDetails = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
+        dangerouslySetInnerHTML={{ __html: description }}
       >
-        {description}
       </motion.p>
       {subjects.length ? (
         <motion.div 
